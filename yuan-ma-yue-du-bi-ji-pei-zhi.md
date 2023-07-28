@@ -83,7 +83,6 @@ KeyEvent.KEYCODE_EISU -> { // Switch keyboard
 
 给有这个bug的主题配置文件（ `` *.trime.yaml ）加上 ` ``liquid\_keyboard\_window`` ` ``
 
-````
 ```yaml
   liquid_keyboard_window: #液态键盘模式下显示的悬浮窗口組件
     - {start: "", click: "space", label: " 空格 "}
@@ -94,14 +93,14 @@ KeyEvent.KEYCODE_EISU -> { // Switch keyboard
 
 * bug对应源码片段：
 
-Composition.java
+trime/app/src/main/java/com/osfans/trime/ime/text/Composition.java
+
 ```java
-/** 设置悬浮窗, 用于liquidKeyboard的悬浮窗工具栏 */
+  /** 设置悬浮窗, 用于liquidKeyboard的悬浮窗工具栏 */
   public void setWindow() {
     if (getVisibility() != View.VISIBLE) return;
     if (liquid_keyboard_window_comp.isEmpty()) {
-      // 如果 `*.trime.yaml` 文件未配置 `liquid_keyboard_window` 悬浮窗，将导致issue#857-Bug1
-      // this.setVisibility(GONE);
+      this.setVisibility(GONE);
       return;
     }
 
@@ -117,5 +116,7 @@ Composition.java
     setMovementMethod(LinkMovementMethod.getInstance());
   }
 ```
-````
+
+在这个函数中使用了 `this.setVisibility(GONE);` 导致编码悬浮窗永久不可见。
+
 
