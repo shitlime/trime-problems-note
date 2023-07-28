@@ -117,6 +117,35 @@ KeyEvent.KEYCODE_EISU -> { // Switch keyboard
   }
 ```
 
-在这个函数中使用了 `this.setVisibility(GONE);` 导致编码悬浮窗永久不可见。
+在上面这个方法中使用了 `this.setVisibility(GONE);` 导致编码悬浮窗不可见，
+然后在下面的方法中执行 `mComposition.getRootView().setVisibility(View.VISIBLE);`
+但是 `.getRootView()` 获取的是View，并不是 `Composition` 本身，所以 `setVisibility(View.VISIBLE)` 实际并没有产生效果。
 
+`trime/app/src/main/java/com/osfans/trime/ime/core/Trime.java`
 
+```java
+ /** 更新Rime的中西文狀態、編輯區文本 */
+  public int updateComposing() {
+    final @Nullable InputConnection ic = getCurrentInputConnection();
+    activeEditorInstance.updateComposingText();
+    if (ic != null && !isWinFixed()) isCursorUpdated = ic.requestCursorUpdates(1);
+    int startNum = 0;
+    if (mCandidateRoot != null) {
+      if (isPopupWindowEnabled) {
+        Timber.d("updateComposing() SymbolKeyboardType=%s", symbolKeyboardType.toString());
+        if (symbolKeyboardType != SymbolKeyboardType.NO_KEY
+            && symbolKeyboardType != SymbolKeyboardType.CANDIDATE) {
+          mComposition.setWindow();
+          showCompositionView(false);
+        } else {
+          mComposition.getRootView().setVisibility(View.VISIBLE);
+          startNum = mComposition.setWindow(minPopupSize, minPopupCheckSize, Integer.MAX_VALUE);
+          mCandidate.setText(startNum);
+          // if isCursorUpdated, showCompositionView will be called in onUpdateCursorAnchorInfo
+          // otherwise we need to call it here
+          if (!isCursorUpdated) showCompositionView(true);
+        }
+      } else {
+        mCandidate.setText(0);
+      }
+```
