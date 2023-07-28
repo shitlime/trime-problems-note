@@ -71,7 +71,7 @@ KeyEvent.KEYCODE_EISU -> { // Switch keyboard
 3. 返回到主键盘
 4. 输入任意字符，发现编码悬浮窗消失，并且之后都消失了；
 
-但是默认的 `trime.yaml 主题却表现正常。`
+但是默认的 `trime.yaml` 主题却表现正常。
 
 
 
@@ -81,7 +81,7 @@ KeyEvent.KEYCODE_EISU -> { // Switch keyboard
 
 
 
-给有这个bug的主题配置文件（ `` *.trime.yaml ）加上 ` ``liquid\_keyboard\_window`` ` ``
+给有这个bug的主题配置文件（ `*.trime.yaml` ）加上 `liquid\_keyboard\_window`
 
 ```yaml
   liquid_keyboard_window: #液态键盘模式下显示的悬浮窗口組件
@@ -93,7 +93,7 @@ KeyEvent.KEYCODE_EISU -> { // Switch keyboard
 
 * bug对应源码片段：
 
-trime/app/src/main/java/com/osfans/trime/ime/text/Composition.java
+`trime/app/src/main/java/com/osfans/trime/ime/text/Composition.java`
 
 ```java
   /** 设置悬浮窗, 用于liquidKeyboard的悬浮窗工具栏 */
